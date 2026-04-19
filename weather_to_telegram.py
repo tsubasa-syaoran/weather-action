@@ -1,6 +1,6 @@
 import os
 import requests
-from datetime import datetime
+from datetime import datetime, timedelta
 
 def get_weather(city, api_key):
     """获取天气信息"""
@@ -14,9 +14,18 @@ def get_weather(city, api_key):
         feels_like = data['main']['feels_like']
         humidity = data['main']['humidity']
         wind_speed = data['wind']['speed']
-        return f"🌤 城市: {city}\n⏰ 时间: {datetime.now():%Y-%m-%d %H:%M}\n" \
-               f"天气: {weather_desc}\n温度: {temp}°C (体感 {feels_like}°C)\n" \
-               f"湿度: {humidity}%\n风速: {wind_speed} m/s"
+
+        # UTC 时间 + 8 小时 = 北京时间
+        beijing_time = datetime.utcnow() + timedelta(hours=8)
+
+        return (
+            f"🌤 城市: {city}\n"
+            f"⏰ 时间: {beijing_time:%Y-%m-%d %H:%M} (北京时间)\n"
+            f"天气: {weather_desc}\n"
+            f"温度: {temp}°C (体感 {feels_like}°C)\n"
+            f"湿度: {humidity}%\n"
+            f"风速: {wind_speed} m/s"
+        )
     except Exception as e:
         return f"获取天气失败: {e}"
 
