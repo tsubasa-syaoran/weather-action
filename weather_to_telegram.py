@@ -15,7 +15,6 @@ def get_weather(city, api_key):
         humidity = data['main']['humidity']
         wind_speed = data['wind']['speed']
 
-
         # UTC 时间 + 8 小时 = 北京时间
         beijing_time = datetime.utcnow() + timedelta(hours=8)
 
