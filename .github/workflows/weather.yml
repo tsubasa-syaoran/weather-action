@@ -1,0 +1,29 @@
+name: Send Weather to Telegram
+
+on:
+  schedule:
+    - cron: "0 0 * * *"  # 每天 UTC 0 点执行（北京时间早上 8 点）
+  workflow_dispatch:      # 允许手动触发
+
+jobs:
+  send-weather:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.x"
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Run weather script
+        env:
+          CITY: ${{ secrets.CITY }}
+          WEATHER_API_KEY: ${{ secrets.WEATHER_API_KEY }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python weather_to_telegram.py
